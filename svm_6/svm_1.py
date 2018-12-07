@@ -1,3 +1,8 @@
+"""
+简化版的SMO算法
+"""
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import random
@@ -132,6 +137,8 @@ if __name__ == '__main__':
     dataArr, labelArr = loadDataSet('testSet.txt')
     b, alphas = smoSimple(dataArr, labelArr, 0.6, 0.001, 40)
     w = get_w(dataArr, labelArr, alphas)
+    print(w)
+    print(b)
     showClassifer(dataArr, labelArr, w, b)
 
 
