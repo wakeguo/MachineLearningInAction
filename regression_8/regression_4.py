@@ -133,11 +133,18 @@ def crossValidation(xArr, yArr, numVal=10):
             errorMat[i, k] = ressError(yEst.T.A, testY)
     meanErrors = np.mean(errorMat, 0)
     minMean = float(min(meanErrors))
+    # print(meanErrors.shape)  # (30, )
+    # print(minMean)  # 最小的一个值
+    # print('wMat: ', wMat.shape)  # (30, 4)
+
     bestWeights = wMat[np.nonzero(meanErrors == minMean)]
+    # print(bestWeights.shape)  # (1, 4)  选取最好的一个，每次产生的值是不一样的
     xMat = np.mat(xArr); yMat = np.mat(yArr).T
-    meanX = np.mean(xMat, 0); varX = np.var(xMat, 0)
+    meanX = np.mean(xMat, 0)  # shape(1,4)
+    varX = np.var(xMat, 0)  # shape(1,4)
     nuReg = bestWeights/varX
     print('the best model from Ridge Regression is: \n', nuReg)
+    print('with constant term: ', -1 * nuReg * meanX.T + np.mean(yMat))
 
 
 
@@ -145,15 +152,20 @@ def crossValidation(xArr, yArr, numVal=10):
 lgX = []
 lgY = []
 setDataCollect(lgX, lgY)
-lgX1 = np.ones((np.shape(lgX)[0], 5))  # 也有插入的方法看看
+
+lgX1 = np.ones((np.shape(lgX)[0], 5))
 lgX1[:, 1:5] = np.mat(lgX)
+# 插入方法 mat和array都可以使用
+# lgX1 = np.mat(lgX)
+# lgX1 = np.insert(lgX1, 0, 1, axis=1)
 w = standRegres(lgX1, lgY)
-print('{} + {}*年份 + {}*数目 + {}*是否全新 + {}*原价'.format(w[0], w[1], w[2], [3], w[4]))  # 找一下解决
+print('{:f} + {:f}*年份 + {}*数目 + {}*是否全新 + {}*原价'.format(float(w[0]), float(w[1]), float(w[2]),
+                                                    float(w[3]), float(w[4])))  # 找一下解决
 print('%f %+f*年份 %+f*部件数量 %+f*是否为全新 %+f*原价' % (w[0], w[1], w[2], w[3], w[4]))
 print(w)
+print(np.shape(lgX))  # (63, 4)
+print(np.shape(lgY))  # (63, )
 
-print(np.shape(lgX))
-print(np.shape(lgY))
 
 crossValidation(lgX, lgY, 10)
 

@@ -1,5 +1,5 @@
 """
-预测鲍鱼的年龄
+预测鲍鱼的年龄，没有加入偏置项
 """
 
 import numpy as np
@@ -20,16 +20,6 @@ def loadDataSet(fileName):
         dataMat.append(lineArr)
         labelMat.append(float(curLine[-1]))
     return dataMat, labelMat
-
-
-# 绘制数据
-def plotdata(dataMat, labelMat):
-    dataMat = np.array(dataMat)  # shape(200, 2)
-    labelMat = np.array(labelMat)
-    X = dataMat[:, 1]  # shape(200,)
-    Y = labelMat  # shape(200,)
-    plt.scatter(X, Y, c='blue', s=30, alpha=0.5)
-    plt.show()
 
 
 # 标准线性回归
@@ -58,7 +48,6 @@ def lwlr(testPoint, xArr, yArr, k=1.0):
         print('This matrix is singular, cannot do inverse')
         return
     ws = xTx.I * (xMat.T * (weights * yMat))
-
     return testPoint * ws
 
 
@@ -165,24 +154,24 @@ def stageWise(xArr, yArr, eps=0.01, numIt=100):
     return returnMat
 
 
-# abX, abY = loadDataSet('abalone.txt')
-# returnMat = stageWise(abX, abY, 0.001, 5000)
-# print(returnMat[-1, :])  # 前向逐步回归，会发现与下面的标准回归w值基本一样
-#
-#
-# xMat = np.mat(abX)
-# yMat = np.mat(abY).T
-# xMean = np.mean(xMat, 0)
-# xVar = np.var(xMat, 0)
-# xMat = (xMat - xMean)/xVar
-# yMean = np.mean(yMat, 0)
-# yMat = yMat - yMean
-# w = standRegres(xMat, yMat.T)
-# print(w)  # 归一化之后的标准回归分析
-#
-# plt.plot(returnMat)
-# plt.show()
-#
+abX, abY = loadDataSet('abalone.txt')
+returnMat = stageWise(abX, abY, 0.001, 5000)
+print(returnMat[-1, :])  # 前向逐步回归，会发现与下面的标准回归w值基本一样
+
+
+xMat = np.mat(abX)
+yMat = np.mat(abY).T
+xMean = np.mean(xMat, 0)
+xVar = np.var(xMat, 0)
+xMat = (xMat - xMean)/xVar
+yMean = np.mean(yMat, 0)
+yMat = yMat - yMean
+w = standRegres(xMat, yMat.T)
+print(w)  # 归一化之后的标准回归分析
+
+plt.plot(returnMat)
+plt.show()
+
 
 
 
